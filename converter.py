@@ -77,6 +77,13 @@ def build_about():
 	soup = make_page(markdown)
 	write_page("about.html", soup)
 
+def build_index():
+	with open("docs/about.html", "r") as f:
+		html = f.read()
+
+	with open("docs/index.html", "w") as f:
+		f.write(html)
+
 def build_site():
 	pages = []
 
@@ -98,7 +105,8 @@ def build_site():
 	soup = build_sitemap(pages)
 	
 	make_css(STYLE)
-		
+	
+	build_index()
 
 def main():
 	"""
