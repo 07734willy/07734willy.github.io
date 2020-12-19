@@ -1,0 +1,54 @@
+* {
+	background-color: rgb(15, 15, 15);
+}
+
+html, body {
+	width: 100%;
+	margin: 0;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+}
+
+#article-container {
+	width: 50%;
+	min-width: 132ch;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	margin-right: auto;
+	margin-left: auto;
+	min-height: 100vh;
+	overflow: hidden;
+}
+
+#content-body {
+	color: rgb(150, 150, 150);
+}
+
+h1 { font-size: 48px; }
+h2 { font-size: 28px; }
+h3 { font-size: 22px; }
+
+p, span {
+	font-size: 20px;
+}
+
+pre {
+	font-size: 18px;
+}
+
+.inline-math {
+	font-size: 22px;
+}
+
+.block-math {
+	font-size: 32px;
+    display: flex;
+    justify-content: center; /* For horizontal alignment */
+}
+
