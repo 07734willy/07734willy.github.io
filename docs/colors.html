@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="" name="keywords"/>
+<meta content="07734willy" name="author"/>
+<title id="title">Page Title</title>
+<link href="code.css" rel="stylesheet"/>
+<link href="page.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="backdrop">
+<div id="article-container">
+<div id="content-body"><h1>Code colors</h1>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">openapi_url</span><span class="p">:</span>
+        <span class="n">urls</span> <span class="o">=</span> <span class="p">(</span><span class="n">server_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span> <span class="k">for</span> <span class="n">server_data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="p">)</span>
+        <span class="n">server_urls</span> <span class="o">=</span> <span class="p">{</span><span class="n">url</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span> <span class="k">if</span> <span class="n">url</span><span class="p">}</span>
+
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">openapi</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JSONResponse</span><span class="p">:</span>
+            <span class="n">root_path</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">scope</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"root_path"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">root_path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">server_urls</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">root_path</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_path_in_servers</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">{</span><span class="s2">"url"</span><span class="p">:</span> <span class="n">root_path</span><span class="p">})</span>
+                    <span class="n">server_urls</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">root_path</span><span class="p">)</span> <span class="c1"># just a test comment</span>
+            <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openapi</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">openapi_url</span><span class="p">,</span> <span class="n">openapi</span><span class="p">,</span> <span class="n">include_in_schema</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">openapi_url</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">docs_url</span><span class="p">:</span>
+
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">swagger_ui_html</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTMLResponse</span><span class="p">:</span>
+            <span class="n">root_path</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">scope</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"root_path"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
+            <span class="n">openapi_url</span> <span class="o">=</span> <span class="n">root_path</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">openapi_url</span>
+            <span class="n">oauth2_redirect_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">swagger_ui_oauth2_redirect_url</span>
+            <span class="k">if</span> <span class="n">oauth2_redirect_url</span><span class="p">:</span>
+                <span class="n">oauth2_redirect_url</span> <span class="o">=</span> <span class="n">root_path</span> <span class="o">+</span> <span class="n">oauth2_redirect_url</span>
+            <span class="k">return</span> <span class="n">get_swagger_ui_html</span><span class="p">(</span>
+                <span class="n">openapi_url</span><span class="o">=</span><span class="n">openapi_url</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">+</span> <span class="s2">" - Swagger UI"</span><span class="p">,</span>
+                <span class="n">oauth2_redirect_url</span><span class="o">=</span><span class="n">oauth2_redirect_url</span><span class="p">,</span>
+                <span class="n">init_oauth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">swagger_ui_init_oauth</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">docs_url</span><span class="p">,</span> <span class="n">swagger_ui_html</span><span class="p">,</span> <span class="n">include_in_schema</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">swagger_ui_oauth2_redirect_url</span><span class="p">:</span>
+
+            <span class="k">async</span> <span class="k">def</span> <span class="nf">swagger_ui_redirect</span><span class="p">(</span><span class="n">req</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTMLResponse</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">get_swagger_ui_oauth2_redirect_html</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">swagger_ui_oauth2_redirect_url</span><span class="p">,</span>
+                <span class="n">swagger_ui_redirect</span><span class="p">,</span>
+                <span class="n">include_in_schema</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+</code></pre></div></div>
+</div>
+</div>
+</body>
+</html>
