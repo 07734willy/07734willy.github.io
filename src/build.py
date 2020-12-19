@@ -30,7 +30,7 @@ def build_css(style):
 	copyfile(src_filepath, dst_filepath)
 
 def build_sitemap(pages):
-	header = "# Sitemap\n---\n"
+	header = "# Article Listing\n---\n"
 	
 	def to_link(title, filepage):
 		return f"* [{title}]({filepage})"
