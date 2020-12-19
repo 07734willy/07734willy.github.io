@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import markdown
 
 from itertools import starmap
+from shutil import copyfile
 import os
 
 from style import MyStyle
@@ -16,22 +17,31 @@ markdown.extension_configs = {
 }
 
 STYLE = MyStyle
-TEMPLATE_PAGE = "page.html"
+
+TEMPLATE_DIR = "templates"
+BUILD_DIR = "docs"
+ARTICLE_DIR = "articles"
 
 def convert_markdown(text):
 	extensions = [TexExtension(), 'codehilite', 'abbr', 'footnotes', 'tables', 'sane_lists']
 	html = markdown.markdown(text, extensions=extensions)
 	return html
 
-def make_css(style):
+def build_css(style):
 	css = HtmlFormatter(style=style).get_style_defs()
-	with open("docs/code.css", "w") as f:
+	filepath = os.path.join(BUILD_DIR, "code.css")
+	with open(filepath, "w") as f:
 		f.write(css)
+
+	src_filepath = os.path.join(TEMPLATE_DIR, "page.css")
+	dst_filepath = os.path.join(BUILD_DIR, "page.css")
+	copyfile(src_filepath, dst_filepath)
 
 def make_page(markdown):
 	content = convert_markdown(markdown)
 
-	with open(TEMPLATE_PAGE, "r") as f:
+	filepath = os.path.join(TEMPLATE_DIR, "page.html")
+	with open(filepath, "r") as f:
 		html = f.read()
 	
 	soup = BeautifulSoup(html, "html.parser")
@@ -42,7 +52,7 @@ def make_page(markdown):
 	return soup
 
 def get_markdown_files():
-	for root, dirnames, filenames in os.walk("articles/"):
+	for root, dirnames, filenames in os.walk(ARTICLE_DIR):
 		for filename in filenames:
 			filepath = os.path.join(root, filename)
 	
@@ -66,23 +76,22 @@ def build_sitemap(pages):
 	write_page("sitemap.html", soup)
 	
 def write_page(filename, data):
-	filepath = os.path.join("docs", filename)
+	filepath = os.path.join(BUILD_DIR, filename)
 	with open(filepath, "w") as f:
 		f.write(str(data))
 
 def build_about():
-	with open("about.md", "r") as f:
+	filepath = os.path.join(TEMPLATE_DIR, "about.md")
+	with open(filepath, "r") as f:
 		markdown = f.read()
 	
 	soup = make_page(markdown)
 	write_page("about.html", soup)
 
 def build_index():
-	with open("docs/about.html", "r") as f:
-		html = f.read()
-
-	with open("docs/index.html", "w") as f:
-		f.write(html)
+	src_filepath = os.path.join(BUILD_DIR, "about.html")
+	dst_filepath = os.path.join(BUILD_DIR, "index.html")
+	copyfile(src_filepath, dst_filepath)
 
 def build_site():
 	pages = []
@@ -104,16 +113,10 @@ def build_site():
 
 	soup = build_sitemap(pages)
 	
-	make_css(STYLE)
-	
+	build_css(STYLE)
 	build_index()
 
 def main():
-	"""
-	html = make_page("test.md")
-	make_css(STYLE)
-	print(html)
-	"""
 	build_site()
 
 if __name__ == "__main__":
