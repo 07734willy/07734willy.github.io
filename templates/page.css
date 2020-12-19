@@ -1,5 +1,5 @@
 * {
-	background-color: rgb(15, 15, 15);
+	background-color: rgb(25, 25, 25);
 }
 
 html, body {
@@ -35,11 +35,12 @@ h2 { font-size: 28px; }
 h3 { font-size: 22px; }
 
 h1, h2, h3, h4, h5, h6 {
-	color: #555;
+	color: #545B5F;
 }
 
 p, span {
 	font-size: 20px;
+	color: #928C83;
 }
 
 pre span {
