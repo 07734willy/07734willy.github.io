@@ -34,7 +34,7 @@ jobs:
         rm -f docs/*.html docs/*.css
     - name: Build HTML pages
       run: |
-        python src/converter.py
+        python src/build.py
     - name: Commit files
       run: |
         git config --local user.name "07734willy"
