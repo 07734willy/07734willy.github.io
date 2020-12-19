@@ -8,7 +8,7 @@ class CodeStyle(Style):
 	styles = {
 		#**ColorfulStyle.styles,
 
-		Keyword: "#504834", #"#7e3a08",
+		Keyword: "#62583e", #"#504834", #"#7e3a08",
 		Keyword.Constant: "#B4B03D bold",
 		String: "#B4B03D",
 		Number: "#B4B03D",
