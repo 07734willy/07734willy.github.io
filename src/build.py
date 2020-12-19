@@ -5,8 +5,10 @@ from itertools import starmap
 import os
 
 from converter import TEMPLATE_DIR, markdown_to_soup, get_markdown_files
-BUILD_DIR = "docs"
+from style import CodeStyle
 
+BUILD_DIR = "docs"
+STYLE = CodeStyle
 
 def get_article_title(soup):
 	title = soup.find("h1").string
@@ -62,7 +64,7 @@ def build_site():
 		with open(filepath, "r") as f:
 			md_text = f.read()
 
-		soup = make_page(md_text)
+		soup = markdown_to_soup(md_text)
 		filename = os.path.basename(filepath)
 		filepage = os.path.splitext(filename)[0] + ".html"
 		

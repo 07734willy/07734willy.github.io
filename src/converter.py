@@ -3,7 +3,7 @@ import markdown
 
 import os
 
-from style import MyStyle
+from style import CodeStyle
 from latextension import TexExtension
 
 markdown.extension_configs = {
@@ -42,5 +42,6 @@ def get_markdown_files():
 		for filename in filenames:
 			filepath = os.path.join(root, filename)
 	
-			yield filepath
+			if filepath.endswith(".md"):
+				yield filepath
 

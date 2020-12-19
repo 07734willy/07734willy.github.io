@@ -1,13 +1,40 @@
 from pygments.style import Style
 from pygments.styles.colorful import ColorfulStyle
 from pygments.token import Keyword, Name, Comment, String, Error, \
-     Number, Operator, Generic
+     Number, Operator, Generic, Text, Literal, Punctuation
 
 class CodeStyle(Style):
 	default_style = ColorfulStyle.default_style
 	styles = {
-		**ColorfulStyle.styles,
+		#**ColorfulStyle.styles,
 
-		Comment:  'italic #888',
+		Keyword: "#584314", #"#7e3a08",
+		Keyword.Constant: "#a09e5c bold",
+		String: "#a09e5c",
+		Number: "#a09e5c",
+		Operator: "#555",
+		#Operator.Word: "#999 bold",
+		Operator.Word: "#8d5c16", #"#982239", #"#823b57", #"#a14222",
+		Name.Builtin: "#999 bold",
+		Name.Function: "#777 italic",
+		Name.Function.Magic: "bold",
+		Comment: "#555",
 	}
 	
+class OldCodeStyle(Style):
+	default_style = ColorfulStyle.default_style
+	styles = {
+		#**ColorfulStyle.styles,
+
+		Keyword: "#7e3a08",
+		Keyword.Constant: "#a09e5c bold",
+		String: "#a09e5c",
+		Number: "#a09e5c",
+		Operator: "#555",
+		#Operator.Word: "#999 bold",
+		Operator.Word: "#584314", #"#982239", #"#823b57", #"#a14222",
+		Name.Builtin: "#999 bold",
+		Name.Function: "#777 italic",
+		Name.Function.Magic: "bold",
+		Comment: "#555",
+	}
