@@ -6,8 +6,12 @@ name: Python application
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - 'docs/**'
   pull_request:
     branches: [ master ]
+    paths-ignore:
+      - 'docs/**'
 
 jobs:
   build:
@@ -31,3 +35,13 @@ jobs:
     - name: Build HTML pages
       run: |
         python src/converter.py
+    - name: Commit files
+      run: |
+        git config --local user.name "07734willy"
+        git add ./docs
+        git commit -m "Updating the repository GitHub html pages in the docs folder"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
