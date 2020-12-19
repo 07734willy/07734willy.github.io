@@ -39,7 +39,7 @@ jobs:
       run: |
         git config --local user.name "07734willy"
         git add -f ./docs
-        git commit -m "Updating the repository GitHub html pages in the docs folder"
+        git commit -m "Updating the repository GitHub html pages in the docs folder" || true
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
